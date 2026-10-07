@@ -1,0 +1,654 @@
+﻿Dưới đây là toàn bộ mã nguồn đã được xóa sạch các dòng ghi chú và chuẩn hóa lại khoảng trắng để tránh lỗi khi dán vào Visual Studio:
+
+HTML
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopeeFood - Giỏ hàng</title>
+    <link rel="icon" href="https://i.pinimg.com/originals/1f/8d/cd/1f8dcd960cdf340a0ceb5912c5956240.jpg" type="img/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #ee4d2d;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+            .nav-logo img {
+                height: 45px;
+                object-fit: contain;
+                border-radius: 4px;
+            }
+
+        .nav-fill {
+            flex-grow: 1;
+            margin: 0 40px;
+        }
+
+        .nav-search {
+            display: flex;
+            height: 40px;
+            border-radius: 2px;
+            overflow: hidden;
+            background: #fff;
+            padding: 3px;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            border: none;
+            padding: 0 15px;
+            outline: none;
+        }
+
+        .search-btn {
+            background-color: #ee4d2d;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            color: white;
+            border-radius: 2px;
+        }
+
+            .search-btn:hover {
+                background-color: #d73d1f;
+            }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .nav-cart {
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            font-size: 16px;
+            gap: 5px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            left: 15px;
+            color: #ee4d2d;
+            background-color: white;
+            font-weight: bold;
+            font-size: 12px;
+            border-radius: 50%;
+            padding: 2px 6px;
+            border: 1px solid #ee4d2d;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .cart-col {
+            flex: 3;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-col {
+            flex: 1;
+            position: sticky;
+            top: 20px;
+        }
+
+        .checkout-box {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-header {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+            .cart-header h2 {
+                font-weight: 500;
+                font-size: 24px;
+                margin-bottom: 10px;
+                color: #333;
+            }
+
+            .cart-header a {
+                color: #0055aa;
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+        .price-header {
+            position: absolute;
+            right: 0;
+            bottom: 15px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .item {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            padding: 20px 0;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .item-check {
+            margin-right: 15px;
+            margin-top: 5px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .item img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+            .item-details h3 {
+                font-size: 16px;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: #333;
+            }
+
+        .stock {
+            color: #ee4d2d;
+            font-size: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ee4d2d;
+            display: inline-block;
+            padding: 2px 5px;
+            border-radius: 2px;
+        }
+
+        .item-actions {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #757575;
+        }
+
+        .qty-input {
+            width: 60px;
+            padding: 5px;
+            margin-left: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .separator {
+            margin: 0 15px;
+            color: #ddd;
+        }
+
+        .item-actions a {
+            color: #0055aa;
+            text-decoration: none;
+        }
+
+        .item-price-box {
+            font-size: 16px;
+            width: 120px;
+            text-align: right;
+            color: #ee4d2d;
+        }
+
+        .cart-footer {
+            text-align: right;
+            padding-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .checkout-box p {
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .checkout-box .fa-ticket-alt {
+            color: #ee4d2d;
+            margin-right: 5px;
+        }
+
+        .subtotal-section {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+            .subtotal-section strong {
+                color: #ee4d2d;
+                font-size: 20px;
+                display: block;
+                margin-top: 5px;
+            }
+
+        .checkout-btn {
+            width: 100%;
+            background-color: #ee4d2d;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+            .checkout-btn:hover {
+                background-color: #d73d1f;
+            }
+
+        .suggested-section {
+            margin-top: 40px;
+            border-top: 1px dashed #ddd;
+            padding-top: 25px;
+        }
+
+        .suggested-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .suggested-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .suggested-item {
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 15px;
+            text-align: center;
+            transition: box-shadow 0.2s;
+        }
+
+            .suggested-item:hover {
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                border-color: #ee4d2d;
+            }
+
+            .suggested-item img {
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+                border-radius: 4px;
+                margin-bottom: 10px;
+            }
+
+            .suggested-item h4 {
+                font-size: 14px;
+                color: #333;
+                margin-bottom: 5px;
+                font-weight: normal;
+                height: 35px;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+
+            .suggested-item .price {
+                color: #ee4d2d;
+                font-weight: bold;
+                display: block;
+                margin-bottom: 10px;
+            }
+
+        .add-to-cart-btn {
+            background-color: white;
+            color: #ee4d2d;
+            border: 1px solid #ee4d2d;
+            padding: 6px 15px;
+            border-radius: 2px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+            .add-to-cart-btn:hover {
+                background-color: #ee4d2d;
+                color: white;
+            }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="nav-logo">
+                <img src="https://i.pinimg.com/originals/1f/8d/cd/1f8dcd960cdf340a0ceb5912c5956240.jpg" alt="ShopeeFood Logo">
+            </div>
+        </div>
+        <div class="nav-fill">
+            <div class="nav-search">
+                <input type="text" class="search-input" placeholder="Tìm kiếm món ăn, đồ uống, quán ăn...">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="nav-item">
+                <span>Tài khoản</span>
+                <strong>Tạ Đăng Quang Minh</strong>
+            </div>
+            <div class="nav-item">
+                <span>Đơn hàng</span>
+                <strong>Của tôi</strong>
+            </div>
+            <div class="nav-cart">
+                <i class="fas fa-shopping-cart fa-2x"></i>
+                <span id="cart-count" class="cart-count">2</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="cart-col">
+            <div class="cart-header">
+                <h2>Giỏ hàng của bạn</h2>
+                <a href="#" id="toggle-select">Bỏ chọn tất cả</a>
+                <div class="price-header">Đơn giá</div>
+            </div>
+
+            <div class="cart-items">
+                <div class="item" data-price="45000">
+                    <input type="checkbox" class="item-check" checked>
+                    <img src="https://thuthuatnhanh.com/wp-content/uploads/2020/12/hinh-anh-tra-sua-dep-tuyet.jpg" alt="Trà sữa">
+                    <div class="item-details">
+                        <h3>Trà Sữa Trân Châu Đường Đen (Size L, Thêm Trân Châu)</h3>
+                        <p class="stock">Giảm 15%</p>
+                        <div class="item-actions">
+                            <label>Số lượng:</label>
+                            <input type="number" class="qty-input" value="1" min="1">
+                            <span class="separator">|</span>
+                            <a href="#" class="delete-btn">Xóa</a>
+                        </div>
+                    </div>
+                    <div class="item-price-box">
+                        <strong class="item-price">45.000 ₫</strong>
+                    </div>
+                </div>
+
+                <div class="item" data-price="55000">
+                    <input type="checkbox" class="item-check" checked>
+                    <img src="https://thucphamplaza.com/wp-content/uploads/products_img/cong-thuc-pha-che-mint-choco-frappe.jpg" alt="Chocomint">
+                    <div class="item-details">
+                        <h3>Thức uống socola bạc hà xay đá</h3>
+                        <p class="stock">Freeship Extra</p>
+                        <div class="item-actions">
+                            <label>Số lượng:</label>
+                            <input type="number" class="qty-input" value="1" min="1">
+                            <span class="separator">|</span>
+                            <a href="#" class="delete-btn">Xóa</a>
+                        </div>
+                    </div>
+                    <div class="item-price-box">
+                        <strong class="item-price">55.000 ₫</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-footer">
+                Tổng thanh toán (<span class="total-items">2</span> sản phẩm): <strong style="color: #ee4d2d; font-size: 24px;" class="subtotal-price">100.000 ₫</strong>
+            </div>
+
+            <div class="suggested-section">
+                <h2 class="suggested-title">Có thể bạn cũng thích</h2>
+                <div class="suggested-grid">
+                    <div class="suggested-item">
+                        <img src="https://asianinspirations.com.au/wp-content/uploads/2018/12/R01583_Vietnamese_Iced_Coffee.jpg" width="400" alt="Cà phê sữa đá">
+                        <h4>Cà phê sữa đá pha phin</h4>
+                        <span class="price">25.000 ₫</span>
+                        <button class="add-to-cart-btn" data-price="25000"><i class="fas fa-cart-plus"></i> Thêm</button>
+                    </div>
+                    <div class="suggested-item">
+                        <img src="https://tse4.mm.bing.net/th/id/OIP.3VSts7pEEOmlNz-lz0jHLgHaGe?r=0&pid=Api&h=220&P=0" width="400" alt="Trà đào cam sả">
+                        <h4>Trà đào cam sả thanh mát</h4>
+                        <span class="price">35.000 ₫</span>
+                        <button class="add-to-cart-btn" data-price="35000"><i class="fas fa-cart-plus"></i> Thêm</button>
+                    </div>
+                    <div class="suggested-item">
+                        <img src="https://tse4.mm.bing.net/th/id/OIP.ilzyokIm9P7eps66bSB6tQHaDt?r=0&pid=Api&h=220&P=0" width="400" alt="Bánh mì thịt">
+                        <h4>Bánh mì thịt nướng</h4>
+                        <span class="price">20.000 ₫</span>
+                        <button class="add-to-cart-btn" data-price="20000"><i class="fas fa-cart-plus"></i> Thêm</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="sidebar-col">
+            <div class="checkout-box">
+                <p>
+                    <i class="fas fa-ticket-alt"></i>
+                    Đơn hàng đủ điều kiện áp dụng Freeship.
+                </p>
+                <div class="subtotal-section">
+                    Tổng tiền (<span class="total-items">2</span> sản phẩm):
+                    <strong class="subtotal-price">100.000 ₫</strong>
+                </div>
+                <button class="checkout-btn">Mua hàng</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            function formatCurrency(number) {
+                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
+            }
+
+            function updateCart() {
+                const items = document.querySelectorAll('.cart-items .item');
+                let totalQty = 0;
+                let totalPrice = 0;
+
+                items.forEach(item => {
+                    const checkbox = item.querySelector('.item-check');
+                    const qtyInput = item.querySelector('.qty-input');
+                    const priceElement = item.querySelector('.item-price');
+
+                    if (checkbox && checkbox.checked) {
+                        const qty = parseInt(qtyInput.value) || 0;
+                        const unitPrice = parseFloat(item.getAttribute('data-price'));
+
+                        const itemTotal = qty * unitPrice;
+                        if (priceElement) priceElement.innerText = formatCurrency(itemTotal);
+
+                        totalQty += qty;
+                        totalPrice += itemTotal;
+                    } else if (checkbox && priceElement && qtyInput) {
+                        const unitPrice = parseFloat(item.getAttribute('data-price'));
+                        priceElement.innerText = formatCurrency(parseInt(qtyInput.value) * unitPrice);
+                    }
+                });
+
+                const cartCountEl = document.getElementById('cart-count');
+                if (cartCountEl) cartCountEl.innerText = totalQty;
+
+                document.querySelectorAll('.total-items').forEach(el => {
+                    el.innerText = totalQty;
+                });
+                document.querySelectorAll('.subtotal-price').forEach(el => {
+                    el.innerText = formatCurrency(totalPrice);
+                });
+            }
+
+            document.addEventListener('click', function (e) {
+
+                if (e.target.classList.contains('delete-btn')) {
+                    e.preventDefault();
+                    const item = e.target.closest('.item');
+                    if (item) {
+                        item.remove();
+                        updateCart();
+                    }
+                }
+
+                const toggleBtn = document.getElementById('toggle-select');
+                if (toggleBtn && e.target === toggleBtn) {
+                    e.preventDefault();
+                    const checkboxes = document.querySelectorAll('.item-check');
+                    const isDeselect = toggleBtn.innerText === "Bỏ chọn tất cả";
+
+                    checkboxes.forEach(cb => {
+                        cb.checked = !isDeselect;
+                    });
+
+                    toggleBtn.innerText = isDeselect ? "Chọn tất cả" : "Bỏ chọn tất cả";
+                    updateCart();
+                }
+
+                if (e.target.classList.contains('add-to-cart-btn') || e.target.closest('.add-to-cart-btn')) {
+                    e.preventDefault();
+                    const btn = e.target.classList.contains('add-to-cart-btn') ? e.target : e.target.closest('.add-to-cart-btn');
+                    const suggestedItem = btn.closest('.suggested-item');
+
+                    const name = suggestedItem.querySelector('h4').innerText;
+                    const price = btn.getAttribute('data-price');
+                    const imgSrc = suggestedItem.querySelector('img').src;
+
+                    const newItem = document.createElement('div');
+                    newItem.className = 'item';
+                    newItem.setAttribute('data-price', price);
+                    newItem.innerHTML = `
+                                <input type="checkbox" class="item-check" checked>
+                                <img src="${imgSrc}" alt="${name}">
+                                <div class="item-details">
+                                    <h3>${name}</h3>
+                                    <p class="stock">Mới thêm</p>
+                                    <div class="item-actions">
+                                        <label>Số lượng:</label>
+                                        <input type="number" class="qty-input" value="1" min="1">
+                                        <span class="separator">|</span>
+                                        <a href="#" class="delete-btn">Xóa</a>
+                                    </div>
+                                </div>
+                                <div class="item-price-box">
+                                    <strong class="item-price">${formatCurrency(price)}</strong>
+                                </div>
+                            `;
+
+                    document.querySelector('.cart-items').appendChild(newItem);
+
+                    updateCart();
+
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-check"></i> Đã thêm';
+                    btn.style.backgroundColor = '#067D62';
+                    btn.style.color = 'white';
+                    btn.style.borderColor = '#067D62';
+
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.style = '';
+                    }, 1500);
+                }
+            });
+
+            document.addEventListener('input', function (e) {
+                if (e.target.classList.contains('qty-input')) {
+                    updateCart();
+                }
+            });
+
+            document.addEventListener('change', function (e) {
+                if (e.target.classList.contains('item-check')) {
+                    updateCart();
+
+                    const checkboxes = document.querySelectorAll('.item-check');
+                    const checkedBoxes = document.querySelectorAll('.item-check:checked');
+                    const toggleBtn = document.getElementById('toggle-select');
+
+                    if (toggleBtn) {
+                        if (checkboxes.length > 0 && checkboxes.length === checkedBoxes.length) {
+                            toggleBtn.innerText = "Bỏ chọn tất cả";
+                        } else {
+                            toggleBtn.innerText = "Chọn tất cả";
+                        }
+                    }
+                }
+            });
+
+            updateCart();
+        });
+    </script>
+</body>
+</html>
